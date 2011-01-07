@@ -29,10 +29,10 @@ class Xpenser:
             raise
         return result
 
-    def get_expenses(self):
+    def get_expenses(self, params=""):
         ''' '''
         try:
-            result = self._request('expenses')
+            result = self._request('expenses/?' + params)
         except Exception, e:
             print "Unable to get expenses:", str(e)
             return False
@@ -43,4 +43,9 @@ if __name__ == "__main__":
     expenses = xp.get_expenses()
     print "Here are your expenses:"
     for expense in expenses:
+        print expense['type'], expense['amount'], expense['date']
+    
+    print "Expenses modified since 2010-09-28 in any report"
+    new_expenses = xp.get_expenses('modified=2010-09-28+00:00:00&modified_op=gt&report=*')
+    for expense in new_expenses:
         print expense['type'], expense['amount'], expense['date']
